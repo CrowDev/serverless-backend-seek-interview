@@ -37,7 +37,7 @@ functions:
         - put-task/handler.put
     events:
       - httpApi:
-          path: /edit
+          path: /edit/{task_id}
           method: put
   delete-task:
     image:
