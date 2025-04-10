@@ -15,6 +15,29 @@ except Exception as e:
     client = None
 
 
+"""
+    PUT /edit/{task_id} - Update an existing task
+
+    Path Parameters:
+    - task_id: string (required) - ID of the task to update
+
+    Request Body (at least one of these fields must be provided):
+    - title: string - Task title
+    - description: string - Task description
+    - priority: number - Task priority (high, medium, low)
+    - status: string - Task status (todo, in-review, in-progress, done, blocked)
+
+    Response Codes:
+    - 200: Updated successfully
+    - 400: Bad request (validation errors)
+    - 404: Task not found
+    - 500: Server error
+
+    Returns:
+    - JSON response with status code, headers and body
+"""
+
+
 def put(event, context):
     try:
         if client is None:

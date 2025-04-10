@@ -14,6 +14,22 @@ except Exception as e:
     logger.error(f"MongoDB connection error: {e}")
     client = None
 
+"""
+    DELETE /delete/{task_id} - Delete a task
+
+    Path Parameters:
+    - task_id: string (required) - ID of the task to delete
+
+    Response Codes:
+    - 200: Deleted successfully
+    - 400: Bad request (missing task_id)
+    - 404: Task not found
+    - 500: Server error
+
+    Returns:
+    - JSON response with status code, headers and body
+"""
+
 
 def delete(event, context):
     try:
@@ -54,7 +70,7 @@ def delete(event, context):
         }
 
     except Exception as e:
-        logger.error(f"Error deleting task: {str(e)}")
+        logger.error(f"Error deleting [task: {str(e)}")
         return {
             'statusCode': 500,
             'headers': {

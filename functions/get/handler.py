@@ -15,6 +15,18 @@ except Exception as e:
     logger.error(f"MongoDB connection error: {e}")
     client = None
 
+"""
+    GET / - Retrieve all tasks
+
+    Response Codes:
+    - 200: Success, returns array of tasks
+    - 404: No tasks found
+    - 500: Server error (DB connection issues, etc)
+
+    Returns:
+    - JSON response with status code, headers and body
+"""
+
 
 def get(event, context):
     try:

@@ -16,6 +16,24 @@ except Exception as e:
     logger.error(f"MongoDB connection error: {e}")
     client = None
 
+"""
+    POST /create - Create a new task
+
+    Request Body:
+    - title: string (required) - Task title
+    - description: string (required) - Task description
+    - priority: number (required) - Task priority (high, medium, low)
+    - status: string (required) - Task status (todo, in-progress, in-review, done, blocked)
+
+    Response Codes:
+    - 201: Created successfully
+    - 400: Bad request (validation errors)
+    - 500: Server error
+
+    Returns:
+    - JSON response with status code, headers and body
+"""
+
 
 def post(event, context):
     try:
@@ -76,6 +94,17 @@ def post(event, context):
             },
             'body': json.dumps({'error': 'Internal server error'})
         }
+
+
+"""
+    Validates task data for creation
+
+    Args:
+        payload (dict): Task data to validate
+
+    Returns:
+        boolean
+"""
 
 
 def check_payload(payload):
