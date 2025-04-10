@@ -85,9 +85,9 @@ def check_payload(payload):
     for field in required_fields:
         if field not in payload:
             return False
-    if len(payload["title"] == 0):
+    if len(payload["title"]) == 0:
         return False
-    if len(payload["description"] == 0):
+    if len(payload["description"]) == 0:
         return False
     valid_priorities = ["low", "medium", "high"]
     if payload["priority"] not in valid_priorities:
