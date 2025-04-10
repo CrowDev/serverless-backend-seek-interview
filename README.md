@@ -1,98 +1,83 @@
-<!--
-title: 'AWS Simple HTTP Endpoint example in Python'
-description: 'This template demonstrates how to make a simple HTTP API with Python running on AWS Lambda and API Gateway using the Serverless Framework.'
-layout: Doc
-framework: v4
-platform: AWS
-language: python
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, Inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
+# Task Management API
 
-# Serverless Framework Python HTTP API on AWS
+## Project Overview
 
-This template demonstrates how to make a simple HTTP API with Python running on AWS Lambda and API Gateway using the Serverless Framework.
+This project is a serverless Task Management API built using AWS Lambda and MongoDB. The application allows users to create, retrieve, update, and delete tasks through RESTful endpoints.
 
-This template does not include any kind of persistence (database). For more advanced examples, check out the [serverless/examples repository](https://github.com/serverless/examples/) which includes DynamoDB, Mongo, Fauna and other examples.
+## Architecture
 
-## Usage
+- **Serverless Framework**: Infrastructure as code for AWS Lambda deployment
+- **AWS Lambda**: Serverless compute service running the API functions
+- **API Gateway**: HTTP API endpoints for accessing the Lambda functions
+- **MongoDB**: NoSQL database for storing task data
+- **Docker**: Container for Lambda function deployment via AWS ECR
 
-### Deployment
+## API Functionality
 
-```
-serverless deploy
-```
+The API provides a complete task management system with the following endpoints:
 
-After deploying, you should see output similar to:
+### Endpoints
 
-```
-Deploying "aws-python-http-api" to stage "dev" (us-east-1)
+| Method | Endpoint          | Purpose                 |
+| ------ | ----------------- | ----------------------- |
+| GET    | /                 | Fetch all tasks         |
+| POST   | /create           | Create a new task       |
+| PUT    | /edit/{task_id}   | Update an existing task |
+| DELETE | /delete/{task_id} | Remove a task           |
 
-✔ Service deployed to stack aws-python-http-api-dev (85s)
+### Data Model
 
-endpoint: GET - https://6ewcye3q4d.execute-api.us-east-1.amazonaws.com/
-functions:
-  hello: aws-python-http-api-dev-hello (2.3 kB)
-```
+Each task in the system contains:
 
-_Note_: In current form, after deployment, your API is public and can be invoked by anyone. For production deployments, you might want to configure an authorizer. For details on how to do that, refer to [http event docs](https://www.serverless.com/framework/docs/providers/aws/events/apigateway/).
+- **\_id**: Unique identifier (UUID)
+- **title**: Task name
+- **description**: Detailed task information
+- **priority**: Importance level (low, medium, high)
+- **status**: Current state (todo, in-progress, in-review, done, blocked)
 
-### Invocation
+## Implementation Details
 
-After successful deployment, you can call the created application via HTTP:
+### Error Handling
 
-```
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/
-```
+The API implements comprehensive error handling with appropriate HTTP status codes:
 
-Which should result in response similar to the following (removed `input` content for brevity):
+- 200/201: Successful operations
+- 400: Invalid requests (validation errors)
+- 404: Resource not found
+- 500: Server errors
 
-```json
-{
-  "message": "Go Serverless v4.0! Your function executed successfully!"
-}
-```
+### MongoDB Integration
 
-### Local development
+- Connection management with error handling
+- Document-based storage for task data
+- CRUD operations through MongoDB driver
 
-You can invoke your function locally by using the following command:
+### Security
 
-```
-serverless invoke local --function hello
-```
+- Environment variable management for sensitive configuration
+- Input validation to prevent injection attacks
+- Proper error responses that don't leak implementation details
 
-Which should result in response similar to the following:
-
-```json
-{
-  "statusCode": 200,
-  "body": "{\n  \"message\": \"Go Serverless v4.0! Your function executed successfully!\"}"
-}
-```
-
-Alternatively, it is also possible to emulate API Gateway and Lambda locally by using `serverless-offline` plugin. In order to do that, execute the following command:
+## Project Structure
 
 ```
-serverless plugin install -n serverless-offline
+.
+├── Dockerfile                # Container configuration
+├── functions                 # Lambda function handlers
+│   ├── delete                # Delete task endpoint
+│   ├── get                   # Retrieve tasks endpoint
+│   ├── post                  # Create task endpoint
+│   └── put                   # Update task endpoint
+├── requirements.txt          # Python dependencies
+└── serverless.yml            # Service configuration
 ```
 
-It will add the `serverless-offline` plugin to `devDependencies` in `package.json` file as well as will add it to `plugins` in `serverless.yml`.
+## Technical Approach
 
-After installation, you can start local emulation with:
+This project follows these principles:
 
-```
-serverless offline
-```
-
-To learn more about the capabilities of `serverless-offline`, please refer to its [GitHub repository](https://github.com/dherault/serverless-offline).
-
-### Bundling dependencies
-
-In case you would like to include 3rd party dependencies, you will need to use a plugin called `serverless-python-requirements`. You can set it up by running the following command:
-
-```
-serverless plugin install -n serverless-python-requirements
-```
-
-Running the above will automatically add `serverless-python-requirements` to `plugins` section in your `serverless.yml` file and add it as a `devDependency` to `package.json` file. The `package.json` file will be automatically created if it doesn't exist beforehand. Now you will be able to add your dependencies to `requirements.txt` file (`Pipfile` and `pyproject.toml` is also supported but requires additional configuration) and they will be automatically injected to Lambda package during build process. For more details about the plugin's configuration, please refer to [official documentation](https://github.com/UnitedIncome/serverless-python-requirements).
+1. **Microservices Architecture**: Each endpoint is a separate Lambda function
+2. **Infrastructure as Code**: Complete deployment defined in serverless.yml
+3. **Containerization**: Lambda functions packaged as Docker containers
+4. **REST API Design**: Standard HTTP methods mapped to CRUD operations
+5. **NoSQL Database**: Schemaless design for flexibility and scalability
