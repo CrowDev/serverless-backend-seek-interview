@@ -16,7 +16,7 @@ functions:
     image:
       name: baseimage
       command:
-        - get-task/handler.get
+        - get/handler.get
     events:
       - httpApi:
           path: /
@@ -25,7 +25,7 @@ functions:
     image:
       name: baseimage
       command:
-        - post-task/handler.post
+        - post/handler.post
     events:
       - httpApi:
           path: /create
@@ -34,7 +34,7 @@ functions:
     image:
       name: baseimage
       command:
-        - put-task/handler.put
+        - put/handler.put
     events:
       - httpApi:
           path: /edit/{task_id}
@@ -43,7 +43,7 @@ functions:
     image:
       name: baseimage
       command:
-        - delete-task/handler.delete
+        - delete/handler.delete
     events:
       - httpApi:
           path: /delete/{task_id}
