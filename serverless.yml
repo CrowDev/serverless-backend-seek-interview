@@ -1,0 +1,49 @@
+app: get-task
+service: seek-interview
+
+provider:
+  name: aws
+  ecr:
+    images:
+      baseimage:
+        path: ./
+  httpApi:
+    cors: true
+
+functions:
+  get-task:
+    image:
+      name: baseimage
+      command:
+        - get-task/handler.get
+    events:
+      - httpApi:
+          path: /
+          method: get
+  post-task:
+    image:
+      name: baseimage
+      command:
+        - post-task/handler.post
+    events:
+      - httpApi:
+          path: /create
+          method: post
+  put-task:
+    image:
+      name: baseimage
+      command:
+        - put-task/handler.put
+    events:
+      - httpApi:
+          path: /edit/{task_id}
+          method: put
+  delete-task:
+    image:
+      name: baseimage
+      command:
+        - delete-task/handler.delete
+    events:
+      - httpApi:
+          path: /delete/{task_id}
+          method: delete
